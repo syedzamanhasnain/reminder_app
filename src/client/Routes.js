@@ -3,6 +3,7 @@ import Home, { loadHomeData } from "views/Home";
 import About from "views/About";
 import SignUp from "views/SignUp";
 import SignIn from "views/SignIn";
+import ForgotPassword from "views/ForgotPassword";
 
 const appRoutes = [
   {
@@ -29,13 +30,11 @@ const appRoutes = [
         exact: true,
         component: SignUp,
       },
-      /* Parameterized data */
-      /* {
-            path: '/route/:slug',
-            exact: true,
-            component: Home,
-            loadDataWithMatch: loadHomeData
-        }, */
+      {
+        path: "/forgotPassword",
+        exact: true,
+        component: ForgotPassword,
+      }
     ],
   },
 ];

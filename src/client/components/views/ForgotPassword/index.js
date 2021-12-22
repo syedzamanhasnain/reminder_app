@@ -8,7 +8,7 @@ import * as Yup from "yup";
 
 import "./style.scss";
 
-export default function SignIn() {
+export default function ForgotPassword() {
     let history = useHistory();
     let dispatch = useDispatch();
     const formik = useFormik({
@@ -46,7 +46,7 @@ export default function SignIn() {
                 className="circle"
               />
               </div>
-                <h3 className="text-center mb-4">Sign In</h3>
+                <h3 className="text-center mb-4">Forgot Password</h3>
   
                 <form onSubmit={formik.handleSubmit}>
                   <div className="form-group mb-3">
@@ -70,12 +70,12 @@ export default function SignIn() {
                     ) : null}
                   </div>
                   <div className="form-group mb-3">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">New Password</label>
                     <input
-                      id="password"
-                      name="password"
+                      id="newPassword"
+                      name="newPassword"
                       type="password"
-                      placeholder="Enter password"
+                      placeholder="Enter new password"
                       className={
                         formik.touched.password && formik.errors.password
                           ? "form-control error"
@@ -89,30 +89,11 @@ export default function SignIn() {
                       <div className="text-danger">{formik.errors.password}</div>
                     ) : null}
                   </div>
-                  <div className="form-check mb-3">
-                    <input
-                      name="termsAndCondition"
-                      className="form-check-input mb-3 checkbox"
-                      type="checkbox"
-                      value={formik.values.termsAndCondition}
-                      onChange={formik.handleChange}
-                      id="termsAndCondition"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="termsAndCondition"
-                    >
-                      Remember me
-                    </label>
-                    {formik.touched.termsAndCondition && formik.errors.termsAndCondition ? (
-                      <div className="text-danger termsAndCondtionErrMessage">{formik.errors.termsAndCondition}</div>
-                    ) : null}
-                  </div>
                   <button
                     type="submit"
                     className="btn btn-primary btn-block mb-4"
                   >
-                    Sign In
+                    Change Password 
                   </button>
                 </form>
                 <p className="text-center">
