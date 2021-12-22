@@ -6,5 +6,4 @@ const config = {
 		sentry: process.env.SENTRY
 	}
 };
-
 module.exports = config;
