@@ -1,6 +1,6 @@
 @import '../../../assets/scss/_variables';
-	
-		
+	     nav{
+		     background-color:$primary;
 			li {
 				.link {
 					color: rgba(255,255,255,.55);
@@ -8,14 +8,14 @@
 					background-color: transparent;
 					transition: background-color 0.5s ease-in-out;
 					&:hover {
-						color:white;
+						color:$white;
 					}
 				}
 				.active {
-					color:white;
+					color:$white;
 				}
 				&:not(:last-of-type) {
 					padding-right: 10px;
 				}
 			}
-		
+		 }

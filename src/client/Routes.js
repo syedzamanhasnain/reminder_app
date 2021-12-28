@@ -3,6 +3,7 @@ import Home, { loadHomeData } from "views/Home";
 import About from "views/About";
 import SignUp from "views/SignUp";
 import SignIn from "views/SignIn";
+import Reminder from "views/Reminder";
 import ForgotPassword from "views/ForgotPassword";
 
 const appRoutes = [
@@ -34,6 +35,11 @@ const appRoutes = [
         path: "/forgotPassword",
         exact: true,
         component: ForgotPassword,
+      },
+      {
+        path: "/reminder",
+        exact: true,
+        component: Reminder ,
       }
     ],
   },

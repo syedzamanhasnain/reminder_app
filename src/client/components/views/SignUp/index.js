@@ -1,14 +1,15 @@
 import React from "react";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, connect} from "react-redux";
+import { useHistory, NavLink, withRouter } from "react-router-dom";
 import { createNewUser } from "./action";
-import { NavLink } from "react-router-dom";
+
 import * as Yup from "yup";
 
 import "./style.scss";
 
-export default function SignUp() {
+const SignUp = (props) => {
+  // const { errMsg } = props;
   let history = useHistory();
   let dispatch = useDispatch();
   const formik = useFormik({
@@ -26,17 +27,20 @@ export default function SignUp() {
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Required"),
-      termsAndCondition: Yup.boolean().oneOf([true], "You must accept the terms and conditions"),
+      termsAndCondition: Yup.boolean().oneOf(
+        [true],
+        "You must accept the terms and conditions"
+      ),
     }),
 
     onSubmit: (values) => {
       console.log(values);
-       const signUpData = {
-        email:values.email,
-        Name:values.name,
-        password:values.password
+      const signUpData = {
+        email: values.email,
+        Name: values.name,
+        password: values.password,
       };
-       console.log(signUpData);s
+      // console.log(signUpData);
       dispatch(createNewUser(signUpData));
     },
   });
@@ -46,19 +50,19 @@ export default function SignUp() {
         <div className="sign_up">
           <div className="card">
             <div className="card-body p-5">
-            <div className="text-center">
-            <img
-              alt="StudioGraphene"
-              src="/images/logo.png"
-              srcSet="/images/logo@2x.png 2x"
-              className="circle"
-            />
-            </div>
+              <div className="text-center">
+                <img
+                  alt="StudioGraphene"
+                  src="/images/logo.png"
+                  srcSet="/images/logo@2x.png 2x"
+                  className="circle"
+                />
+              </div>
               <h3 className="text-center mb-4">Sign Up</h3>
 
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-3">
-                  <label htmlFor="firstName">First Name</label>
+                  <label htmlFor="firstName">Name</label>
                   <input
                     id="name"
                     name="name"
@@ -156,8 +160,11 @@ export default function SignUp() {
                   >
                     I agree to all terms & conditions
                   </label>
-                  {formik.touched.termsAndCondition && formik.errors.termsAndCondition ? (
-                    <div className="text-danger termsAndCondtionErrMessage">{formik.errors.termsAndCondition}</div>
+                  {formik.touched.termsAndCondition &&
+                  formik.errors.termsAndCondition ? (
+                    <div className="text-danger termsAndCondtionErrMessage">
+                      {formik.errors.termsAndCondition}
+                    </div>
                   ) : null}
                 </div>
                 <button
@@ -167,6 +174,7 @@ export default function SignUp() {
                   Sign Up
                 </button>
               </form>
+
               <p className="text-center">
                 Already a member?
                 <NavLink exact className="ml-2" to="/signin">
@@ -179,4 +187,13 @@ export default function SignUp() {
       </div>
     </section>
   );
-}
+};
+
+
+const mapStateToProps = (state) => {
+  // console.log(state.signUpReducer);
+  return {
+    signupMessage: state.signUpReducer.signupMessage,
+  };
+};
+export default withRouter(connect(mapStateToProps)(SignUp));

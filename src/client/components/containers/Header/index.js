@@ -5,7 +5,7 @@ import "./style.scss";
 function Header() {
   return (
     <section>
-      <nav className="navbar navbar-dark bg-primary">
+      <nav className="navbar navbar-darks">
         <div className="container">
           <div className="navbar-brand" href="#">
             <img
