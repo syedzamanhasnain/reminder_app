@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
-import { useDispatch, connect} from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import { useHistory, NavLink, withRouter } from "react-router-dom";
-import { createNewUser } from "./action";
+import { createNewUser, resetSignup } from "./action";
 
 import * as Yup from "yup";
 
 import "./style.scss";
 
-const SignUp = (props) => {
-  // const { errMsg } = props;
+const SignUp = ({ isSignupSuccess, isLoading, signupMsg }) => {
   let history = useHistory();
   let dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetSignup());
+    // console.log("signup");
+  }, []);
+
+  useEffect(() => {
+    if (isSignupSuccess) {
+      setTimeout(function () {
+        history.push("/signin");
+      }, 1000);
+    }
+  }, [isSignupSuccess]);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -23,7 +36,7 @@ const SignUp = (props) => {
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string().required("Required"),
+      password: Yup.string().required("Required").min(6, "Too Short!"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Required"),
@@ -34,10 +47,10 @@ const SignUp = (props) => {
     }),
 
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       const signUpData = {
+        name: values.name,
         email: values.email,
-        Name: values.name,
         password: values.password,
       };
       // console.log(signUpData);
@@ -59,6 +72,17 @@ const SignUp = (props) => {
                 />
               </div>
               <h3 className="text-center mb-4">Sign Up</h3>
+              {!isLoading && signupMsg && (
+                <div
+                  className={
+                    isSignupSuccess
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                >
+                  {signupMsg}
+                </div>
+              )}
 
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-3">
@@ -154,12 +178,9 @@ const SignUp = (props) => {
                     onChange={formik.handleChange}
                     id="termsAndCondition"
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="termsAndCondition"
-                  >
+                  <div className="form-check-label" htmlFor="termsAndCondition">
                     I agree to all terms & conditions
-                  </label>
+                  </div>
                   {formik.touched.termsAndCondition &&
                   formik.errors.termsAndCondition ? (
                     <div className="text-danger termsAndCondtionErrMessage">
@@ -170,6 +191,7 @@ const SignUp = (props) => {
                 <button
                   type="submit"
                   className="btn btn-primary btn-block mb-4"
+                  disabled={isLoading ? true : false}
                 >
                   Sign Up
                 </button>
@@ -189,11 +211,11 @@ const SignUp = (props) => {
   );
 };
 
-
-const mapStateToProps = (state) => {
-  // console.log(state.signUpReducer);
-  return {
-    signupMessage: state.signUpReducer.signupMessage,
-  };
-};
+const mapStateToProps = ({
+  signUpReducer: { isSignupSuccess, isLoading, signupMsg } = {},
+}) => ({
+  isSignupSuccess,
+  isLoading,
+  signupMsg,
+});
 export default withRouter(connect(mapStateToProps)(SignUp));

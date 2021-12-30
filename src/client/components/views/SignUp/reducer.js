@@ -1,22 +1,44 @@
 const initialState = {
-  signupMessage: "",
+  isSignupSuccess: false,
+  isLoading: false,
+  signupMsg: "",
 };
 
 const signUpReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SIGNUP_STARTED":
+      state = {
+        ...state,
+        isLoadig: true,
+        isSignupSuccess: false,
+        signupMsg: "",
+      };
+      break;
+    case "SIGNUP_RESET":
+      state = {
+        ...state,
+        isSignupSuccess: false,
+        signupMsg: "",
+      };
+      break;
     case "SIGNUP_SUCCESS":
       state = {
         ...state,
-        signupMessage: action.payload,
+
+        isLoadig: false,
+        isSignupSuccess: true,
+        signupMsg: action.payload,
       };
       break;
-
-    case "SIGNUP_FAILURE":
+    case "SIGNUP_FAILURE": {
       state = {
         ...state,
-        signupMessage: action.payload,
+        isLoadig: false,
+        isSignupSuccess: false,
+        signupMsg: action.payload,
       };
       break;
+    }
   }
 
   return state;
