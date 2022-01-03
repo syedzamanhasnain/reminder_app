@@ -13,10 +13,11 @@ export const signInUser = (signInData) => {
       .then((res) => {
         if (res.status == 200 && res.data.success == true) {
           console.log(res.data.token);
-          debugger;
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("loginState", "true");
           dispatch({
             type: "SIGNIN_SUCCESS",
-            payload: res.data.token,
+            // payload: res.data.token,
           });
         }
       })
@@ -31,5 +32,14 @@ export const signInUser = (signInData) => {
           console.log(res.response);
         }
       });
+  };
+};
+
+export const signOut = () => {
+  return (dispatch) => {
+    localStorage.clear();
+    dispatch({
+      type: "SIGN_OUT",
+    });
   };
 };

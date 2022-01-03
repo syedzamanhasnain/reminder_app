@@ -22,7 +22,6 @@ const signInReducer = (state = initialState, action) => {
         isSigninSuccess: true,
         jwtToken: action.payload,
       };
-      debugger;
       break;
     case "SIGNIN_FAILURE": {
       state = {
@@ -30,6 +29,14 @@ const signInReducer = (state = initialState, action) => {
         isLoadig: false,
         isSigninSuccess: false,
         signinMsg: action.payload,
+      };
+      break;
+    }
+    case "SIGN_OUT": {
+      state = {
+        ...state,
+        isLoadig: false,
+        isSigninSuccess: false,
       };
       break;
     }

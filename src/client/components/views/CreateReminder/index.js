@@ -3,35 +3,40 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-//import { addContact } from "../Contacts/action";
+import { createReminder } from "../Reminder/action";
 import "./style.scss";
 
 const CreateReminder = () => {
-  // let history = useHistory();
-  //  let dispatch = useDispatch();
-  let [add, setAdd] = useState(false);
+  let history = useHistory();
+  let dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
       date: "",
       description: "",
-      category: "Other",
-      priority: "Low",
-      status: false,
+      category: "1",
+      priority: "1",
     },
     validationSchema: Yup.object({
       date: Yup.date().required("Required"),
       description: Yup.string().required("Required"),
       category: Yup.string(),
       priority: Yup.string(),
-      status: Yup.boolean(),
     }),
 
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
-      // console.log(values);
-      //   const userData = values;
-      //   dispatch(addContact(userData));
+      console.log(values);
+      //  const createReminderData = values;
+      const createReminderData = {
+        token: localStorage.getItem("token"),
+        title_id: values.category,
+        description: values.description,
+        date: values.date,
+        priority_id: values.priority,
+        status_id: 1,
+      };
+      dispatch(createReminder(createReminderData));
       //   setAdd(true);
       //   setTimeout(function () {
       //     history.push("/");
@@ -96,10 +101,10 @@ const CreateReminder = () => {
               onBlur={formik.handleBlur}
               value={formik.values.category}
             >
-              <option value="Other">Other</option>
-              <option value="Birthday">Birthday</option>
-              <option value="Anniversary">Anniversary</option>
-              <option value="Holiday">Holiday</option>
+              <option value="4">Other</option>
+              <option value="1">Birthday</option>
+              <option value="2">Anniversary</option>
+              <option value="3">Holiday</option>
             </select>
           </div>
           <div className="form-group">
@@ -113,14 +118,14 @@ const CreateReminder = () => {
               onBlur={formik.handleBlur}
               value={formik.values.priority}
             >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
+              <option value="1">Low</option>
+              <option value="2">Medium</option>
+              <option value="3">High</option>
             </select>
           </div>
 
           <button type="submit" className="btn btn-primary btn-block mt-4">
-            {add ? "Creating Reminder..." : "Create Reminder"}
+            Create Reminder
           </button>
         </form>
       </div>
