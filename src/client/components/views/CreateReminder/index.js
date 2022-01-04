@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, connect } from "react-redux";
+import { useHistory, withRouter } from "react-router-dom";
 import { createReminder } from "../Reminder/action";
 import "./style.scss";
 
-const CreateReminder = () => {
+const CreateReminder = ({ createReminderSuccessMsg }) => {
   let history = useHistory();
   let dispatch = useDispatch();
+
+  useEffect(() => {
+    if (createReminderSuccessMsg === "saved successfully.") {
+      setTimeout(function () {
+        history.push("/reminder");
+      }, 1000);
+    }
+  }, [createReminderSuccessMsg]);
 
   const formik = useFormik({
     initialValues: {
@@ -25,7 +33,7 @@ const CreateReminder = () => {
     }),
 
     onSubmit: (values) => {
-     // alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
       console.log(values);
       //  const createReminderData = values;
       const createReminderData = {
@@ -34,9 +42,9 @@ const CreateReminder = () => {
         description: values.description,
         date: values.date,
         priority_id: values.priority,
-        status_id: 1,
       };
       dispatch(createReminder(createReminderData));
+
       //   setAdd(true);
       //   setTimeout(function () {
       //     history.push("/");
@@ -132,4 +140,12 @@ const CreateReminder = () => {
     </div>
   );
 };
-export default CreateReminder;
+
+const mapStateToProps = ({
+  reminderReducer: { createReminderSuccessMsg } = {},
+}) => {
+  // console.log(state);
+  return { createReminderSuccessMsg };
+};
+
+export default withRouter(connect(mapStateToProps)(CreateReminder));

@@ -35,10 +35,11 @@ export const createReminder = (createReminderData) => {
       method: "POST",
       url: "/create_reminder",
       data: createReminderData,
-    }).then(() => {
+    }).then((res) => {
+      //debugger;
       dispatch({
         type: "CREATE_REMINDER",
-        payload: res.data,
+        payload: res.data.success,
       });
     });
   };
@@ -59,14 +60,15 @@ export const editContact = (userData) => {
   };
 };
 
-export const deleteContact = (id) => {
+export const deleteReminderById = (deleteReminderData) => {
   return (dispatch) => {
     return HTTP({
       method: "DELETE",
-      url: `/contacts/${id}`,
+      url: `/delete_reminder/${deleteReminderData.id}`,
+      params: deleteReminderData,
     }).then((res) => {
       dispatch({
-        type: "DELETE_CONTACT_DATA",
+        type: "DELETE_REMINDER_BY_ID",
         payload: res.data,
       });
     });

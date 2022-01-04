@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { useHistory, withRouter } from "react-router-dom";
-import { getReminders } from "./action";
+import { getReminders, deleteReminderById } from "./action";
 import "./style.scss";
 
-//export default function Reminder() {
 const Reminder = (props) => {
   let history = useHistory();
   let dispatch = useDispatch();
@@ -22,6 +21,16 @@ const Reminder = (props) => {
 
   const createReminderBtn = () => {
     history.push("/reminder/create");
+  };
+  const deleteReminder = (reminderId) => {
+    const deleteReminderData = {
+      token: localStorage.getItem("token"),
+      id: reminderId,
+    };
+    dispatch(deleteReminderById(deleteReminderData));
+    dispatch(getReminders());
+
+    //  console.log(id);
   };
 
   return (
@@ -83,28 +92,38 @@ const Reminder = (props) => {
             </div>
             <div>
               <div className="row mt-4 py-2">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">Date</th>
-                      <th scope="col">Category</th>
-                      <th scope="col">Description</th>
-                      <th>Priority</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {getAllReminders.map((reminder, index) => (
-                      <tr key={index}>
-                        <td>{reminder.date}</td>
-                        <td>{reminder.title}</td>
-                        <td>{reminder.description}</td>
-                        <td>{reminder.priority}</td>
-                        <td>{reminder.status}</td>
+                <div className="card reminderCard mx-3">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {getAllReminders.map((reminder, index) => (
+                        <tr key={index}>
+                          <td>{reminder.date}</td>
+                          <td>{reminder.title}</td>
+                          <td>{reminder.description}</td>
+                          <td>{reminder.priority}</td>
+                          <td>{reminder.status}</td>
+                          <td>
+                            <i className="fa fa-pencil-square-o mr-3"></i>
+                            <i
+                              className="fa fa-trash-o trashIcon deleteReminderBtn"
+                              onClick={() => deleteReminder(reminder.id)}
+                            ></i>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -114,11 +133,10 @@ const Reminder = (props) => {
   );
 };
 const mapStateToProps = ({ reminderReducer: { reminders } = {} }) => {
-  // console.log(state);
   return { reminders };
 };
-
 const mapDispatchToProps = (dispatch) => ({
+  deleteReminderById: bindActionCreators(deleteReminderById, dispatch),
   getReminders: bindActionCreators(getReminders, dispatch),
 });
 

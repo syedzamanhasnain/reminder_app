@@ -1,7 +1,14 @@
-.dateInput{
-    max-width: 70%;
+.dateInput {
+  max-width: 70%;
 }
-.dateLabel{
-    margin-top: 6px;
-    margin-right: 12px;
+.dateLabel {
+  margin-top: 6px;
+  margin-right: 12px;
+}
+.reminderCard {
+  width: 100% !important;
+}
+.deleteReminderBtn {
+  cursor: pointer;
+  padding: 5px;
 }
