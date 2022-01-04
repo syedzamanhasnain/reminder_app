@@ -1,10 +1,11 @@
 const initialState = {
   reminders: [],
+ // createReminderSuccessMsg="",
 };
 
 const reminderReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "GET_REMINDER":
+    case "GET_REMINDERS":
       state = {
         ...state,
         reminders: action.payload,
@@ -19,7 +20,7 @@ const reminderReducer = (state = initialState, action) => {
     case "CREATE_REMINDER":
       state = {
         ...state,
-        reminders: action.payload,
+       //  createReminderSuccessMsg: action.payload,
       };
       break;
     case "EDIT_REMINDER":

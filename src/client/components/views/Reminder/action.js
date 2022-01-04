@@ -1,13 +1,14 @@
 import HTTP from "utils/http.service";
 
-export const getContacts = () => {
+export const getReminders = () => {
   return (dispatch) => {
     return HTTP({
       method: "GET",
-      url: "/contacts",
+      url: "/get_reminder",
+      params: { token: localStorage.getItem("token") },
     }).then((res) => {
       dispatch({
-        type: "GET_CONTACT_DATA",
+        type: "GET_REMINDERS",
         payload: res.data,
       });
     });
@@ -37,8 +38,9 @@ export const createReminder = (createReminderData) => {
     }).then(() => {
       dispatch({
         type: "CREATE_REMINDER",
+        payload: res.data,
       });
-    }); 
+    });
   };
 };
 

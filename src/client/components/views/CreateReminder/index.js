@@ -25,7 +25,7 @@ const CreateReminder = () => {
     }),
 
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+     // alert(JSON.stringify(values, null, 2));
       console.log(values);
       //  const createReminderData = values;
       const createReminderData = {

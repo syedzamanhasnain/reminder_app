@@ -1,7 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { useHistory, withRouter } from "react-router-dom";
+import { getReminders } from "./action";
 import "./style.scss";
 
-export default function Reminder() {
+//export default function Reminder() {
+const Reminder = (props) => {
+  let history = useHistory();
+  let dispatch = useDispatch();
+  let [getAllReminders, setGetAllReminders] = useState([]);
+  useEffect(() => {
+    dispatch(getReminders());
+  }, []);
+
+  useEffect(() => {
+    if (props.reminders != 0) {
+      setGetAllReminders(props.reminders);
+    }
+  }, [props.reminders]);
+
+  const createReminderBtn = () => {
+    history.push("/reminder/create");
+  };
+
   return (
     <section>
       <div className="container">
@@ -50,7 +72,11 @@ export default function Reminder() {
                 <input type="date" className="form-control dateInput" />
               </div>
               <div className="col-5">
-                <button type="button" className="btn btn-primary btn-block">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-block"
+                  onClick={() => createReminderBtn()}
+                >
                   Create Reminder
                 </button>
               </div>
@@ -60,16 +86,23 @@ export default function Reminder() {
                 <table className="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">Date Wed 20 Dec</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Description</th>
+                      <th>Priority</th>
+                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>dsdsd</td>
-                    </tr>
-                    <tr>
-                      <td>dsdsd sdsd</td>
-                    </tr>
+                    {getAllReminders.map((reminder, index) => (
+                      <tr key={index}>
+                        <td>{reminder.date}</td>
+                        <td>{reminder.title}</td>
+                        <td>{reminder.description}</td>
+                        <td>{reminder.priority}</td>
+                        <td>{reminder.status}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -79,4 +112,16 @@ export default function Reminder() {
       </div>
     </section>
   );
-}
+};
+const mapStateToProps = ({ reminderReducer: { reminders } = {} }) => {
+  // console.log(state);
+  return { reminders };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  getReminders: bindActionCreators(getReminders, dispatch),
+});
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Reminder)
+);
