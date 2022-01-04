@@ -9,15 +9,16 @@ const Reminder = (props) => {
   let history = useHistory();
   let dispatch = useDispatch();
   let [getAllReminders, setGetAllReminders] = useState([]);
+  let [deleteBtnClick, setDeleteBtnClick] = useState(0);
   useEffect(() => {
     dispatch(getReminders());
-  }, []);
+  }, [props.deleteByIdSuccessMsg]);
 
   useEffect(() => {
     if (props.reminders != 0) {
       setGetAllReminders(props.reminders);
     }
-  }, [props.reminders]);
+  }, [props.reminders, props.deleteByIdSuccessMsg]);  
 
   const createReminderBtn = () => {
     history.push("/reminder/create");
@@ -28,7 +29,6 @@ const Reminder = (props) => {
       id: reminderId,
     };
     dispatch(deleteReminderById(deleteReminderData));
-    dispatch(getReminders());
 
     //  console.log(id);
   };
@@ -132,8 +132,10 @@ const Reminder = (props) => {
     </section>
   );
 };
-const mapStateToProps = ({ reminderReducer: { reminders } = {} }) => {
-  return { reminders };
+const mapStateToProps = ({
+  reminderReducer: { reminders, deleteByIdSuccessMsg } = {},
+}) => {
+  return { reminders, deleteByIdSuccessMsg };
 };
 const mapDispatchToProps = (dispatch) => ({
   deleteReminderById: bindActionCreators(deleteReminderById, dispatch),

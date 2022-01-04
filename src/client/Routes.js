@@ -6,6 +6,7 @@ import SignIn from "views/SignIn";
 import Reminder from "views/Reminder";
 import ForgotPassword from "views/ForgotPassword";
 import CreateReminder from "views/CreateReminder";
+import EditReminder from "views/EditReminder";
 
 const appRoutes = [
   {
@@ -40,13 +41,18 @@ const appRoutes = [
       {
         path: "/reminder",
         exact: true,
-        component: Reminder ,
+        component: Reminder,
       },
       {
         path: "/reminder/create",
         exact: true,
         component: CreateReminder,
-      }
+      },
+      {
+        path: "/reminder/edit/:id",
+        exact: false,
+        component: EditReminder,
+      },
     ],
   },
 ];

@@ -1,6 +1,7 @@
 const initialState = {
   reminders: [],
   createReminderSuccessMsg: "",
+  deleteByIdSuccessMsg: "",
 };
 
 const reminderReducer = (state = initialState, action) => {
@@ -8,6 +9,7 @@ const reminderReducer = (state = initialState, action) => {
     case "GET_REMINDERS":
       state = {
         ...state,
+        deleteByIdSuccessMsg: "",
         createReminderSuccessMsg: "",
         reminders: action.payload,
       };
@@ -34,7 +36,7 @@ const reminderReducer = (state = initialState, action) => {
     case "DELETE_REMINDER_BY_ID":
       state = {
         ...state,
-        //reminders: action.payload,
+        deleteByIdSuccessMsg: action.payload,
       };
       break;
   }

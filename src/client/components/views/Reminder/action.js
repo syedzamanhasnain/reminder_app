@@ -69,7 +69,7 @@ export const deleteReminderById = (deleteReminderData) => {
     }).then((res) => {
       dispatch({
         type: "DELETE_REMINDER_BY_ID",
-        payload: res.data,
+        payload: res.data.success,
       });
     });
   };
