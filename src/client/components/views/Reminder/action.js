@@ -15,14 +15,15 @@ export const getReminders = () => {
   };
 };
 
-export const getContact = (id) => {
+export const getReminderById = (editReminderData) => {
   return (dispatch) => {
     return HTTP({
       method: "GET",
-      url: `/contacts/${id}`,
+      url: `/view_reminder_by_id/${editReminderData.id}`,
+      params: { token: localStorage.getItem("token"), id: editReminderData.id },
     }).then((res) => {
       dispatch({
-        type: "GET_SINGLE_CONTACT_DATA",
+        type: "GET_REMINDER_BY_ID",
         payload: res.data,
       });
     });
@@ -45,16 +46,16 @@ export const createReminder = (createReminderData) => {
   };
 };
 
-export const editContact = (userData) => {
+export const editReminder = (editReminderData) => {
   return (dispatch) => {
     return HTTP({
       method: "PUT",
-      url: `/contacts/${Number(userData.id)}`,
-      data: userData,
-    }).then(() => {
+      url: `/update_reminder`,
+      data: editReminderData,
+    }).then((res) => {
       dispatch({
-        type: "EDIT_CONTACT_DATA",
-        payload: userData,
+        type: "EDIT_REMINDER_BY_ID",
+        payload: res.data.success,
       });
     });
   };

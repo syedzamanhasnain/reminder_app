@@ -9,7 +9,6 @@ const Reminder = (props) => {
   let history = useHistory();
   let dispatch = useDispatch();
   let [getAllReminders, setGetAllReminders] = useState([]);
-  let [deleteBtnClick, setDeleteBtnClick] = useState(0);
   useEffect(() => {
     dispatch(getReminders());
   }, [props.deleteByIdSuccessMsg]);
@@ -18,7 +17,7 @@ const Reminder = (props) => {
     if (props.reminders != 0) {
       setGetAllReminders(props.reminders);
     }
-  }, [props.reminders, props.deleteByIdSuccessMsg]);  
+  }, [props.reminders, props.deleteByIdSuccessMsg]);
 
   const createReminderBtn = () => {
     history.push("/reminder/create");
@@ -31,6 +30,9 @@ const Reminder = (props) => {
     dispatch(deleteReminderById(deleteReminderData));
 
     //  console.log(id);
+  };
+  const editReminder = (reminderEditId) => {
+    history.push(`reminder/edit/${reminderEditId}`);
   };
 
   return (
@@ -113,7 +115,10 @@ const Reminder = (props) => {
                           <td>{reminder.priority}</td>
                           <td>{reminder.status}</td>
                           <td>
-                            <i className="fa fa-pencil-square-o mr-3"></i>
+                            <i
+                              className="fa fa-pencil-square-o mr-3 deleteReminderBtn"
+                              onClick={() => editReminder(reminder.id)}
+                            ></i>
                             <i
                               className="fa fa-trash-o trashIcon deleteReminderBtn"
                               onClick={() => deleteReminder(reminder.id)}
@@ -137,6 +142,7 @@ const mapStateToProps = ({
 }) => {
   return { reminders, deleteByIdSuccessMsg };
 };
+
 const mapDispatchToProps = (dispatch) => ({
   deleteReminderById: bindActionCreators(deleteReminderById, dispatch),
   getReminders: bindActionCreators(getReminders, dispatch),

@@ -2,36 +2,80 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, connect } from "react-redux";
-import { useHistory, withRouter } from "react-router-dom";
-import { createReminder } from "../Reminder/action";
+import { bindActionCreators } from "redux";
+import { useHistory, withRouter, useParams } from "react-router-dom";
+import { getReminderById, editReminder } from "../Reminder/action";
 import "./style.scss";
 
-const EditReminder = ({ createReminderSuccessMsg }) => {
-  let history = useHistory();
+const EditReminder = ({ editReminderSuccessMsg, reminderById }) => {
+  const history = useHistory();
+  let { editId } = useParams();
   let dispatch = useDispatch();
+  const [initialValue, setInitialValue] = useState({
+    date: "",
+    description: "",
+    category: "",
+    priority: "",
+    status: "",
+  });
+
+  const editReminderData = {
+    id: editId,
+  };
+  useEffect(() => {
+    dispatch(getReminderById(editReminderData));
+  }, []);
+
+  useEffect(() => {
+    if (reminderById) {
+      setInitialValue({
+        date: reminderById.date,
+        description: reminderById.description,
+        category: reminderById.title_id,
+        priority: reminderById.priority_id,
+        status: reminderById.status_id,
+      });
+    }
+  }, [reminderById]);
+
+  useEffect(() => {
+    if (editReminderSuccessMsg === "update successfully.") {
+      setTimeout(function () {
+        history.push("/reminder");
+      }, 1000);
+    }
+  }, [editReminderSuccessMsg]);
 
   const formik = useFormik({
-    initialValues: {
-      date: "",
-      description: "",
-      category: "1",
-      priority: "1",
-    },
+    initialValues: initialValue,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       date: Yup.date().required("Required"),
       description: Yup.string().required("Required"),
       category: Yup.string(),
       priority: Yup.string(),
+      status: Yup.string(),
     }),
 
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      //  alert(JSON.stringify(values, null, 2));
+
+      const editReminderData = {
+        id: editId,
+        token: localStorage.getItem("token"),
+        title_id: values.category,
+        description: values.description,
+        date: values.date,
+        priority_id: values.priority,
+        status_id: values.status,
+      };
+      dispatch(editReminder(editReminderData));
     },
   });
   return (
     <div className="card mx-auto card-width border-info">
       <div className="card-header">
-        <h4>Create Reminder</h4>
+        <h4>Edit Reminder</h4>
       </div>
       <div className="card-body p-5">
         <form onSubmit={formik.handleSubmit}>
@@ -76,7 +120,7 @@ const EditReminder = ({ createReminderSuccessMsg }) => {
             ) : null}
           </div>
           <div className="form-group">
-            <label htmlFor="inputPassword4">Category</label>
+            <label htmlFor="category">Category</label>
 
             <select
               id="category"
@@ -86,14 +130,14 @@ const EditReminder = ({ createReminderSuccessMsg }) => {
               onBlur={formik.handleBlur}
               value={formik.values.category}
             >
-              <option value="4">Other</option>
               <option value="1">Birthday</option>
               <option value="2">Anniversary</option>
               <option value="3">Holiday</option>
+              <option value="4">Festival</option>
             </select>
           </div>
           <div className="form-group">
-            <label htmlFor="inputPassword4">Priority</label>
+            <label htmlFor="priority">Priority</label>
             <select
               className="form-control"
               id="priority"
@@ -108,9 +152,24 @@ const EditReminder = ({ createReminderSuccessMsg }) => {
               <option value="3">High</option>
             </select>
           </div>
+          <div className="form-group">
+            <label htmlFor="status">Status</label>
+            <select
+              className="form-control"
+              id="status"
+              name="status"
+              className="form-control"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.status}
+            >
+              <option value="1">Complete</option>
+              <option value="2">Incomplete</option>
+            </select>
+          </div>
 
           <button type="submit" className="btn btn-primary btn-block mt-4">
-            Create Reminder
+            Edit Reminder
           </button>
         </form>
       </div>
@@ -118,9 +177,16 @@ const EditReminder = ({ createReminderSuccessMsg }) => {
   );
 };
 
-const mapStateToProps = ({}) => {
-  // console.log(state);
-  return {};
+const mapStateToProps = ({
+  reminderReducer: { reminderById, editReminderSuccessMsg } = {},
+}) => {
+  return { reminderById, editReminderSuccessMsg };
 };
+const mapDispatchToProps = (dispatch) => ({
+  getReminderById: bindActionCreators(getReminderById, dispatch),
+  editReminder: bindActionCreators(editReminder, dispatch),
+});
 
-export default withRouter(connect(mapStateToProps)(EditReminder));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(EditReminder)
+);

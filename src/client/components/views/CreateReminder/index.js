@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, connect } from "react-redux";
@@ -109,10 +109,10 @@ const CreateReminder = ({ createReminderSuccessMsg }) => {
               onBlur={formik.handleBlur}
               value={formik.values.category}
             >
-              <option value="4">Other</option>
               <option value="1">Birthday</option>
               <option value="2">Anniversary</option>
               <option value="3">Holiday</option>
+              <option value="4">Festival</option>
             </select>
           </div>
           <div className="form-group">

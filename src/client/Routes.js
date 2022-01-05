@@ -49,7 +49,7 @@ const appRoutes = [
         component: CreateReminder,
       },
       {
-        path: "/reminder/edit/:id",
+        path: "/reminder/edit/:editId",
         exact: false,
         component: EditReminder,
       },
