@@ -1,41 +1,52 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, connect } from "react-redux";
-import { signInUser } from "./action";
-import { NavLink, withRouter, useHistory } from "react-router-dom";
+import { useHistory, NavLink, withRouter } from "react-router-dom";
+import { createNewUser, resetSignup } from "./action";
+
 import * as Yup from "yup";
 
 import "./style.scss";
 
-const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
+const ResetPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
   let history = useHistory();
   let dispatch = useDispatch();
 
-  useEffect(() => {
-    if (isSigninSuccess) {
-      setTimeout(function () {
-        history.push("/reminder");
-      }, 1000);
-    }
-  }, [isSigninSuccess]);
+  //   useEffect(() => {
+  //     dispatch(resetSignup());
+  //     // console.log("signup");
+  //   }, []);
+
+  //   useEffect(() => {
+  //     if (isSignupSuccess) {
+  //       setTimeout(function () {
+  //         history.push("/signin");
+  //       }, 1000);
+  //     }
+  //   }, [isSignupSuccess]);
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string().required("Required"),
+      password: Yup.string().required("Required").min(6, "Too Short!"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Required"),
     }),
+
     onSubmit: (values) => {
       // console.log(values);
-      const signInData = {
+      const signUpData = {
         email: values.email,
         password: values.password,
       };
-      // console.log(signInData);
-      dispatch(signInUser(signInData));
+      console.log(signUpData);
+      //  dispatch(createNewUser(signUpData));
     },
   });
   return (
@@ -52,10 +63,8 @@ const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
                   className="circle"
                 />
               </div>
-              <h3 className="text-center mb-4">Sign In</h3>
-              {!isLoading && signinMsg && (
-                <div className="alert alert-danger">{signinMsg}</div>
-              )}
+              <h3 className="text-center mb-4">Reset Password</h3>
+
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-3">
                   <label htmlFor="email">Email</label>
@@ -97,36 +106,43 @@ const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
                     <div className="text-danger">{formik.errors.password}</div>
                   ) : null}
                 </div>
-                <div className="d-flex justify-content-between">
-                  <div className="form-check mb-3">
-                    <input
-                      name="rememberMe"
-                      className="form-check-input mb-3 checkbox"
-                      type="checkbox"
-                      id="rememberMe"
-                    />
-                    <label className="form-check-label" htmlFor="rememberMe">
-                      Remember me
-                    </label>
-                  </div>
-                  <p className="  ">
-                    <NavLink exact className="ml-2" to="/forgotPassword">
-                      Forgot password?
-                    </NavLink>
-                  </p>
+                <div className="form-group mb-3">
+                  <label htmlFor="password">Confirm Password</label>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Enter confirm password"
+                    className={
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                        ? "form-control error"
+                        : "form-control"
+                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.confirmPassword}
+                  />
+                  {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword ? (
+                    <div className="text-danger">
+                      {formik.errors.confirmPassword}
+                    </div>
+                  ) : null}
                 </div>
 
                 <button
                   type="submit"
                   className="btn btn-primary btn-block mb-4"
                 >
-                  Sign In
+                  Submit
                 </button>
               </form>
+
               <p className="text-center">
-                Don't have an account?
-                <NavLink exact className="ml-2" to="/signup">
-                  Sign Up
+                Already a member?
+                <NavLink exact className="ml-2" to="/signin">
+                  Sign In
                 </NavLink>
               </p>
             </div>
@@ -138,11 +154,10 @@ const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
 };
 
 const mapStateToProps = ({
-  signInReducer: { isSigninSuccess, isLoading, signinMsg, jwtToken } = {},
+  signUpReducer: { isSignupSuccess, isLoading, signupMsg } = {},
 }) => ({
-  isSigninSuccess,
+  isSignupSuccess,
   isLoading,
-  signinMsg,
-  jwtToken,
+  signupMsg,
 });
-export default withRouter(connect(mapStateToProps)(SignIn));
+export default withRouter(connect(mapStateToProps)(ResetPassword));
