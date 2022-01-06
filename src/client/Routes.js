@@ -1,5 +1,5 @@
 import Website from "./layout/Website/Website";
-import Home, { loadHomeData } from "views/Home";
+import Home from "views/Home";
 import About from "views/About";
 import SignUp from "views/SignUp";
 import SignIn from "views/SignIn";
@@ -17,7 +17,6 @@ const appRoutes = [
         path: "/",
         exact: true,
         component: Home,
-        // loadData: loadHomeData
       },
       {
         path: "/about",
@@ -55,7 +54,7 @@ const appRoutes = [
         component: EditReminder,
       },
       {
-        path: "/resetpassword/:token",
+        path: "/resetpassword/:resettoken",
         exact: false,
         component: ResetPassword,
       },

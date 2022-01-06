@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, connect } from "react-redux";
-//import { createNewUser } from "./action";
+import { createPasswordLink, resetForgotPassword } from "./action";
 import { NavLink, withRouter, useHistory } from "react-router-dom";
 import * as Yup from "yup";
 
 import "./style.scss";
 
-const ForgotPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
+const ForgotPassword = ({
+  isForgotPasswordSuccess,
+  isLoading,
+  forgotPasswordMsg,
+}) => {
   let history = useHistory();
   let dispatch = useDispatch();
   const formik = useFormik({
@@ -23,9 +27,13 @@ const ForgotPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
         email: values.email,
       };
       console.log(forgotPasswordData);
-      //   dispatch(createNewUser(signUpData));
+      dispatch(createPasswordLink(forgotPasswordData));
     },
   });
+  useEffect(() => {
+    dispatch(resetForgotPassword());
+    // console.log("signup");
+  }, []);
   return (
     <section>
       <div className="container">
@@ -40,8 +48,18 @@ const ForgotPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
                   className="circle"
                 />
               </div>
-              <h3 className="text-center mb-4">Forgot Password</h3>
-
+              <h3 className="text-center mb-4">Forgot Password {isLoading}</h3>
+              {!isLoading && forgotPasswordMsg && (
+                <div
+                  className={
+                    isForgotPasswordSuccess
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                >
+                  {forgotPasswordMsg}
+                </div>
+              )}
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-3">
                   <label htmlFor="email">Email</label>
@@ -66,7 +84,8 @@ const ForgotPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
 
                 <button
                   type="submit"
-                  className="btn btn-primary btn-block mb-4"
+                  className="btn btn-primary btn-block mb-4 abx"
+                  disabled={isLoading}
                 >
                   Submit
                 </button>
@@ -85,10 +104,14 @@ const ForgotPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
   );
 };
 const mapStateToProps = ({
-  signUpReducer: { isSignupSuccess, isLoading, signupMsg } = {},
+  forgotPasswordReducer: {
+    isForgotPasswordSuccess,
+    isLoading,
+    forgotPasswordMsg,
+  } = {},
 }) => ({
-  isSignupSuccess,
+  isForgotPasswordSuccess,
   isLoading,
-  signupMsg,
+  forgotPasswordMsg,
 });
 export default withRouter(connect(mapStateToProps)(ForgotPassword));

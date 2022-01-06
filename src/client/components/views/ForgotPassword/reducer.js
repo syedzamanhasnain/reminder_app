@@ -4,12 +4,12 @@ const initialState = {
   forgotPasswordMsg: "",
 };
 
-const forgotPaswodReducer = (state = initialState, action) => {
+const forgotPasswodReducer = (state = initialState, action) => {
   switch (action.type) {
     case "FORGOT_PASSWORD_STARTED":
       state = {
         ...state,
-        isLoadig: true,
+        isLoading: true,
         isForgotPasswordSuccess: false,
         forgotPasswordMsg: "",
       };
@@ -25,7 +25,7 @@ const forgotPaswodReducer = (state = initialState, action) => {
       state = {
         ...state,
 
-        isLoadig: false,
+        isLoading: false,
         isForgotPasswordSuccess: true,
         forgotPasswordMsg: action.payload,
       };
@@ -33,7 +33,7 @@ const forgotPaswodReducer = (state = initialState, action) => {
     case "FORGOT_PASSWORD_FAILURE": {
       state = {
         ...state,
-        isLoadig: false,
+        isLoading: false,
         isForgotPasswordSuccess: false,
         forgotPasswordMsg: action.payload,
       };
@@ -43,4 +43,4 @@ const forgotPaswodReducer = (state = initialState, action) => {
 
   return state;
 };
-export default forgotPaswodReducer;
+export default forgotPasswodReducer;

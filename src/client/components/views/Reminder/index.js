@@ -9,6 +9,8 @@ const Reminder = (props) => {
   let history = useHistory();
   let dispatch = useDispatch();
   let [getAllReminders, setGetAllReminders] = useState([]);
+  let [getRemindersByDate, setGetRemindersByDate] = useState([]);
+
   useEffect(() => {
     dispatch(getReminders());
   }, [props.deleteByIdSuccessMsg]);
@@ -16,6 +18,7 @@ const Reminder = (props) => {
   useEffect(() => {
     if (props.reminders != 0) {
       setGetAllReminders(props.reminders);
+      setGetRemindersByDate(props.reminders);
     }
   }, [props.reminders, props.deleteByIdSuccessMsg]);
 
@@ -34,55 +37,35 @@ const Reminder = (props) => {
   const editReminder = (reminderEditId) => {
     history.push(`reminder/edit/${reminderEditId}`);
   };
+  const sortByDate = (e) => {
+    console.log(e.target.value);
+
+    if (e.target.value == "") {
+      console.log(e.target.value);
+      setGetRemindersByDate(getAllReminders);
+    } else {
+      const result = getAllReminders.filter(
+        (data) => data.date === e.target.value
+      );
+      setGetRemindersByDate(result);
+    }
+  };
 
   return (
     <section>
       <div className="container">
         <div className="row mt-5">
-          <div className="col-4">
-            <div className="card">
-              <div className="card-header">Filters</div>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">All</li>
-                <li className="list-group-item">Today</li>
-                <li className="list-group-item">Upcomming</li>
-              </ul>
-            </div>
-            <div className="card mt-4">
-              <div className="card-header">Status</div>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">All</li>
-                <li className="list-group-item">Incompleted</li>
-                <li className="list-group-item">Completed</li>
-              </ul>
-            </div>
-            <div className="card mt-4">
-              <div className="card-header">Category</div>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">All</li>
-                <li className="list-group-item">Birthdays</li>
-                <li className="list-group-item">Holidays</li>
-                <li className="list-group-item">Anniversary</li>
-                <li className="list-group-item">Others</li>
-              </ul>
-            </div>
-            <div className="card mt-4">
-              <div className="card-header">Priority</div>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item">None</li>
-                <li className="list-group-item">High</li>
-                <li className="list-group-item">Medium</li>
-                <li className="list-group-item">Low</li>
-              </ul>
-            </div>
-          </div>
-          <div className="col-8">
+          <div className="col-12">
             <div className="row">
-              <div className="col-7 d-inline-flex">
+              <div className="col-5 d-inline-flex">
                 <div className="dateLabel">Sort By Date :</div>
-                <input type="date" className="form-control dateInput" />
+                <input
+                  type="date"
+                  className="form-control dateInput"
+                  onChange={(e) => sortByDate(e)}
+                />
               </div>
-              <div className="col-5">
+              <div className="col-3">
                 <button
                   type="button"
                   className="btn btn-primary btn-block"
@@ -91,9 +74,30 @@ const Reminder = (props) => {
                   Create Reminder
                 </button>
               </div>
+
+              <div className="col-4">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-block"
+                  onClick={() => createReminderBtn()}
+                >
+                  Delete All Completed
+                </button>
+              </div>
             </div>
             <div>
               <div className="row mt-4 py-2">
+                <div className="btn-group btn-block mx-3">
+                  <button type="button" className="btn btn-primary btnTab">
+                    All
+                  </button>
+                  <button type="button" className="btn btn-primary btnTab">
+                    Completed
+                  </button>
+                  <button type="button" className="btn btn-primary btnTab">
+                    Incompleted
+                  </button>
+                </div>
                 <div className="card reminderCard mx-3">
                   <table className="table table-hover">
                     <thead>
@@ -107,13 +111,13 @@ const Reminder = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {getAllReminders.map((reminder, index) => (
+                      {getRemindersByDate.map((reminder, index) => (
                         <tr key={index}>
-                          <td>{reminder.date}</td>
-                          <td>{reminder.title}</td>
-                          <td>{reminder.description}</td>
-                          <td>{reminder.priority}</td>
-                          <td>{reminder.status}</td>
+                          <td>{reminder.date || "-"}</td>
+                          <td>{reminder.title || "-"}</td>
+                          <td>{reminder.description || "-"}</td>
+                          <td>{reminder.priority || "-"}</td>
+                          <td>{reminder.status || "-"}</td>
                           <td>
                             <i
                               className="fa fa-pencil-square-o mr-3 deleteReminderBtn"

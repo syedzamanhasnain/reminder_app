@@ -5,6 +5,8 @@ import homeReducer from "views/Home/reducer";
 import signUpReducer from "views/signUp/reducer";
 import signInReducer from "views/signIn/reducer";
 import reminderReducer from "views/Reminder/reducer";
+import forgotPasswordReducer from "views/ForgotPassword/reducer";
+import resetPasswordReducer from "views/ResetPassword/reducer";
 
 export default () => {
   const store = createStore(
@@ -13,6 +15,8 @@ export default () => {
       signUpReducer,
       signInReducer,
       reminderReducer,
+      forgotPasswordReducer,
+      resetPasswordReducer,
       /* somemorereducer */
     }),
     IS_SERVER ? {} : window.INITIAL_STATE,

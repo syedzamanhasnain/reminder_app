@@ -110,8 +110,8 @@ const CreateReminder = ({ createReminderSuccessMsg }) => {
               value={formik.values.category}
             >
               <option value="1">Birthday</option>
-              <option value="2">Anniversary</option>
-              <option value="3">Holiday</option>
+              <option value="2"> Holiday</option>
+              <option value="3">Anniversary</option>
               <option value="4">Festival</option>
             </select>
           </div>

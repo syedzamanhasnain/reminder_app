@@ -7,20 +7,19 @@ export const createPasswordLink = (forgotPasswordData) => {
     });
     return HTTP({
       method: "POST",
-      url: "/register",
+      url: "/reset_password_link",
       data: forgotPasswordData,
     })
       .then((res) => {
-        if (res.status == 200 && res.data.error) {
-          //console.log(res.data.error.email[0]);
-          dispatch({
-            type: "FORGOT_PASSWORD_FAILURE",
-            payload: res.data.error.email[0],
-          });
-        } else {
-          //  console.log(res.data.message);
+        if (res.data.status) {
+          console.log(res);
           dispatch({
             type: "FORGOT_PASSWORD_SUCCESS",
+            payload: res.data.status,
+          });
+        } else {
+          dispatch({
+            type: "FORGOT_PASSWORD_FAILURE",
             payload: res.data.message,
           });
         }

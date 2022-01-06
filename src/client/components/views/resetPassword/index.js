@@ -1,29 +1,26 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, connect } from "react-redux";
-import { useHistory, NavLink, withRouter } from "react-router-dom";
-import { createNewUser, resetSignup } from "./action";
+import { useHistory, NavLink, withRouter, useParams } from "react-router-dom";
+import { resetPassword, resetResetPassword } from "./action";
 
 import * as Yup from "yup";
 
 import "./style.scss";
 
-const ResetPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
+const ResetPassword = ({
+  isLoading,
+  isResetPasswordSuccess,
+  resetPasswordMsg,
+}) => {
   let history = useHistory();
   let dispatch = useDispatch();
+  let { resettoken } = useParams();
 
-  //   useEffect(() => {
-  //     dispatch(resetSignup());
-  //     // console.log("signup");
-  //   }, []);
-
-  //   useEffect(() => {
-  //     if (isSignupSuccess) {
-  //       setTimeout(function () {
-  //         history.push("/signin");
-  //       }, 1000);
-  //     }
-  //   }, [isSignupSuccess]);
+  useEffect(() => {
+    dispatch(resetResetPassword());
+    // console.log("signup");
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -33,20 +30,22 @@ const ResetPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string().required("Required").min(6, "Too Short!"),
+      password: Yup.string().required("Required").min(8, "Too Short!"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Required"),
     }),
 
     onSubmit: (values) => {
-      // console.log(values);
-      const signUpData = {
+      const resetPasswordData = {
         email: values.email,
         password: values.password,
+        password_confirmation: values.password,
+        token: resettoken,
       };
-      console.log(signUpData);
-      //  dispatch(createNewUser(signUpData));
+      //alert(JSON.stringify(values, null, 2));
+      console.log(resetPasswordData);
+      dispatch(resetPassword(resetPasswordData));
     },
   });
   return (
@@ -64,7 +63,17 @@ const ResetPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
                 />
               </div>
               <h3 className="text-center mb-4">Reset Password</h3>
-
+              {!isLoading && resetPasswordMsg && (
+                <div
+                  className={
+                    isResetPasswordSuccess
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                >
+                  {resetPasswordMsg}
+                </div>
+              )}
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-3">
                   <label htmlFor="email">Email</label>
@@ -134,6 +143,7 @@ const ResetPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
                 <button
                   type="submit"
                   className="btn btn-primary btn-block mb-4"
+                  disabled={isLoading}
                 >
                   Submit
                 </button>
@@ -154,10 +164,14 @@ const ResetPassword = ({ isSignupSuccess, isLoading, signupMsg }) => {
 };
 
 const mapStateToProps = ({
-  signUpReducer: { isSignupSuccess, isLoading, signupMsg } = {},
+  resetPasswordReducer: {
+    isLoading,
+    resetPasswordMsg,
+    isResetPasswordSuccess,
+  } = {},
 }) => ({
-  isSignupSuccess,
   isLoading,
-  signupMsg,
+  isResetPasswordSuccess,
+  resetPasswordMsg,
 });
 export default withRouter(connect(mapStateToProps)(ResetPassword));
