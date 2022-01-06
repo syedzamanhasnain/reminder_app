@@ -1,6 +1,5 @@
 import Website from "./layout/Website/Website";
 import Home from "views/Home";
-import About from "views/About";
 import SignUp from "views/SignUp";
 import SignIn from "views/SignIn";
 import Reminder from "views/Reminder";
@@ -17,11 +16,6 @@ const appRoutes = [
         path: "/",
         exact: true,
         component: Home,
-      },
-      {
-        path: "/about",
-        exact: true,
-        component: About,
       },
       {
         path: "/signin",

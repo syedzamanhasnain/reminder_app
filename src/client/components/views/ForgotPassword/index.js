@@ -91,9 +91,9 @@ const ForgotPassword = ({
                 </button>
               </form>
               <p className="text-center">
-                Don't have an account?
-                <NavLink exact className="ml-2" to="/signup">
-                  Sign Up
+                Already a member?
+                <NavLink exact className="ml-2" to="/signin">
+                  Sign In
                 </NavLink>
               </p>
             </div>

@@ -1,3 +1,5 @@
+@import "../../../assets/scss/_variables";
+
 .dateInput {
   max-width: 70%;
 }
@@ -20,4 +22,9 @@
 }
 .btnTab {
   padding: 12px !important;
+}
+.dateCard {
+  padding: 10px !important;
+  background-color: $primary !important;
+  color: $white;
 }

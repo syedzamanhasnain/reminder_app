@@ -3,7 +3,9 @@ const initialState = {
   reminderById: [],
   createReminderSuccessMsg: "",
   deleteByIdSuccessMsg: "",
+  deleteCompletedSuccessMsg: "",
   editReminderSuccessMsg: "",
+  deleteReminderByDateSuccessMsg: "",
 };
 
 const reminderReducer = (state = initialState, action) => {
@@ -14,6 +16,8 @@ const reminderReducer = (state = initialState, action) => {
         deleteByIdSuccessMsg: "",
         createReminderSuccessMsg: "",
         editReminderSuccessMsg: "",
+        deleteCompletedSuccessMsg: "",
+        deleteReminderByDateSuccessMsg: "",
         reminders: action.payload,
       };
       break;
@@ -41,6 +45,19 @@ const reminderReducer = (state = initialState, action) => {
       state = {
         ...state,
         deleteByIdSuccessMsg: action.payload,
+      };
+      break;
+
+    case "DELETE_COMPLETED_REMINDER":
+      state = {
+        ...state,
+        deleteCompletedSuccessMsg: action.payload,
+      };
+      break;
+    case "DELETE_REMINDER_BY_DATE":
+      state = {
+        ...state,
+        deleteReminderByDateSuccessMsg: action.payload,
       };
       break;
   }

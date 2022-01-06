@@ -75,3 +75,32 @@ export const deleteReminderById = (deleteReminderData) => {
     });
   };
 };
+export const deleteCompletedReminder = (deleteCompletedReminder) => {
+  return (dispatch) => {
+    return HTTP({
+      method: "DELETE",
+      url: `/delete_completed`,
+      params: deleteCompletedReminder,
+    }).then((res) => {
+      dispatch({
+        type: "DELETE_COMPLETED_REMINDER",
+        payload: res.data.success,
+      });
+    });
+  };
+};
+
+export const deleteReminderByDate = (deleteReminderByDateData) => {
+  return (dispatch) => {
+    return HTTP({
+      method: "DELETE",
+      url: `/delete_selected`,
+      params: deleteReminderByDateData,
+    }).then((res) => {
+      dispatch({
+        type: "DELETE_REMINDER_BY_DATE",
+        payload: res.data.success,
+      });
+    });
+  };
+};

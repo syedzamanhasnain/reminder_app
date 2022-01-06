@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, useHistory } from "react-router-dom";
-import { useDispatch, connect } from "react-redux";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { signOut } from "../../views/SignIn/action";
 import "./style.scss";
 
@@ -10,6 +10,10 @@ function Header({ isLogin }) {
   const signOutBtn = () => {
     dispatch(signOut());
 
+    history.push("/signin");
+  };
+
+  const signInBtn = () => {
     history.push("/signin");
   };
 
@@ -39,29 +43,13 @@ function Header({ isLogin }) {
           ) : (
             <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
               <li className="nav-item col-6 col-md-auto">
-                <NavLink exact className="link" activeClassName="active" to="/">
-                  Home
-                </NavLink>
-              </li>
-              <li className="nav-item col-6 col-md-auto">
-                <NavLink
-                  exact
-                  className="link"
-                  activeClassName="active"
-                  to="/signup"
-                >
-                  Sign Up
-                </NavLink>
-              </li>
-              <li className="nav-item col-6 col-md-auto">
-                <NavLink
-                  exact
-                  className="link"
-                  activeClassName="active"
-                  to="/signin"
+                <button
+                  type="button"
+                  onClick={() => signInBtn()}
+                  className="btn btn-outline-light"
                 >
                   Sign In
-                </NavLink>
+                </button>
               </li>
             </ul>
           )}
