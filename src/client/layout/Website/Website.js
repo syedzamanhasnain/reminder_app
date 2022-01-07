@@ -35,6 +35,8 @@ const WebsiteLayout = ({
     const isLogin = localStorage.getItem("loginState");
     setLoginState(isLogin === "true");
   }, [isSigninSuccess]);
+  console.log("sign in success website", isSigninSuccess);
+  console.log("sign in state website", loginState);
 
   return (
     <div className="site-wrapper">

@@ -16,7 +16,7 @@ function Header({ isLogin }) {
   const signInBtn = () => {
     history.push("/signin");
   };
-
+  console.log("login state heaader", isLogin);
   return (
     <section>
       <nav className="navbar navbar-darks">

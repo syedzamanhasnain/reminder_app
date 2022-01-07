@@ -9,7 +9,6 @@ import {
   deleteReminderByDate,
 } from "./action";
 import "./style.scss";
-import { filter } from "compression";
 
 const sortAndfilter = (data) => {
   const all = {};
@@ -89,6 +88,7 @@ const Reminder = (props) => {
   let dispatch = useDispatch();
   let [getAllReminders, setGetAllReminders] = useState([]);
   let [getRemindersByDate, setGetRemindersByDate] = useState([]);
+  let [getRemindersByStatus, setGetRemindersByStatus] = useState([]);
   let [statusFilter, setStatusFilter] = useState("");
 
   useEffect(() => {
@@ -103,6 +103,7 @@ const Reminder = (props) => {
     if (props.reminders != 0) {
       setGetAllReminders(props.reminders);
       setGetRemindersByDate(props.reminders);
+      setGetRemindersByStatus(props.reminders);
     }
   }, [
     props.reminders,
@@ -110,6 +111,14 @@ const Reminder = (props) => {
     props.deleteCompletedSuccessMsg,
     props.deleteReminderByDateSuccessMsg,
   ]);
+
+  useEffect(() => {
+    const resultByStatus = getRemindersByDate.filter(
+      (data) => data.status === statusFilter
+    );
+    console.log(resultByStatus);
+    setGetRemindersByStatus(resultByStatus);
+  }, [statusFilter, getRemindersByDate]);
 
   const createReminderBtn = () => {
     history.push("/reminder/create");
@@ -167,11 +176,6 @@ const Reminder = (props) => {
     if (e.target.value == "") {
       console.log(e.target.value);
       setGetRemindersByDate(getAllReminders);
-
-      const resultByStatus = getAllReminders.filter(
-        (data) => data.status === "close"
-      );
-      console.log(resultByStatus);
     } else {
       const result = getAllReminders.filter(
         (data) => data.date === e.target.value
@@ -221,21 +225,36 @@ const Reminder = (props) => {
                 <div className="btn-group btn-block mx-3">
                   <button
                     type="button"
-                    className="btn btn-outline-primary btnTab"
+                    //className="btn btn-outline-primary btnTab"
+                    className={
+                      statusFilter == ""
+                        ? "btn btn-primary btnTab"
+                        : "btn btn-outline-primary btnTab"
+                    }
                     onClick={() => getAllBtn()}
                   >
                     All
                   </button>
                   <button
                     type="button"
-                    className="btn btn-outline-primary btnTab"
+                    //  className="btn btn-outline-primary btnTab"
+                    className={
+                      statusFilter == "open"
+                        ? "btn btn-primary btnTab"
+                        : "btn btn-outline-primary btnTab"
+                    }
                     onClick={() => getCompletedBtn()}
                   >
                     Completed
                   </button>
                   <button
                     type="button"
-                    className="btn btn-outline-primary btnTab"
+                    //   className="btn btn-outline-primary btnTab"
+                    className={
+                      statusFilter == "close"
+                        ? "btn btn-primary btnTab"
+                        : "btn btn-outline-primary btnTab"
+                    }
                     onClick={() => getIncompletedBtn()}
                   >
                     Incompleted
@@ -254,7 +273,7 @@ const Reminder = (props) => {
                   ) : (
                     <div>
                       <TableBody
-                        data={getRemindersByDate}
+                        data={getRemindersByStatus}
                         editReminder={editReminder}
                         deleteReminder={deleteReminder}
                       />
