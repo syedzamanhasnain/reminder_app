@@ -12,6 +12,9 @@ import "./style.scss";
 
 const sortAndfilter = (data) => {
   const all = {};
+  if (data.length === 0) {
+    return {};
+  }
   data
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map((el) => {

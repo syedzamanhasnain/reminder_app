@@ -18,7 +18,7 @@ const reminderReducer = (state = initialState, action) => {
         editReminderSuccessMsg: "",
         deleteCompletedSuccessMsg: "",
         deleteReminderByDateSuccessMsg: "",
-        reminders: action.payload,
+        reminders: Array.isArray(action.payload) ? action.payload : [],
       };
       break;
     case "GET_REMINDER_BY_ID":
