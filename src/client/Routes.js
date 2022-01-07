@@ -1,8 +1,12 @@
 import Website from "./layout/Website/Website";
-import Home, { loadHomeData } from "views/Home";
-import About from "views/About";
+import Home from "views/Home";
 import SignUp from "views/SignUp";
 import SignIn from "views/SignIn";
+import Reminder from "views/Reminder";
+import ForgotPassword from "views/ForgotPassword";
+import CreateReminder from "views/CreateReminder";
+import EditReminder from "views/EditReminder";
+import ResetPassword from "views/ResetPassword";
 
 const appRoutes = [
   {
@@ -12,12 +16,6 @@ const appRoutes = [
         path: "/",
         exact: true,
         component: Home,
-        // loadData: loadHomeData
-      },
-      {
-        path: "/about",
-        exact: true,
-        component: About,
       },
       {
         path: "/signin",
@@ -29,13 +27,31 @@ const appRoutes = [
         exact: true,
         component: SignUp,
       },
-      /* Parameterized data */
-      /* {
-            path: '/route/:slug',
-            exact: true,
-            component: Home,
-            loadDataWithMatch: loadHomeData
-        }, */
+      {
+        path: "/forgotPassword",
+        exact: true,
+        component: ForgotPassword,
+      },
+      {
+        path: "/reminder",
+        exact: true,
+        component: Reminder,
+      },
+      {
+        path: "/reminder/create",
+        exact: true,
+        component: CreateReminder,
+      },
+      {
+        path: "/reminder/edit/:editId",
+        exact: false,
+        component: EditReminder,
+      },
+      {
+        path: "/resetpassword/:resettoken",
+        exact: false,
+        component: ResetPassword,
+      },
     ],
   },
 ];

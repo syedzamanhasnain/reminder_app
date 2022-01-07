@@ -1,0 +1,37 @@
+{
+    "reminder": [
+      {
+        "id": 1,
+        "category": "Leanne",
+        "descriptions": "Graham",
+        "date": "Sincere@april.biz",
+        "priority":"low",
+        "status": "uncompleted"
+      },
+      {
+        "id": 2,
+        "category": "Leanne",
+        "descriptions": "Graham",
+        "date": "Sincere@april.biz",
+        "priority":"low",
+        "status": "uncompleted"
+      },
+      {
+        "id": 3,
+        "category": "Leanne",
+        "descriptions": "Graham",
+        "date": "Sincere@april.biz",
+        "priority":"low",
+        "status": "uncompleted"
+      },
+      {
+        "id": 4,
+        "category": "Leanne",
+        "descriptions": "Graham",
+        "date": "Sincere@april.biz",
+        "priority":"low",
+        "status": "uncompleted"
+      }
+ 
+    ]
+  }

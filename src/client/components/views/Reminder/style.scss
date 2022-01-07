@@ -1,0 +1,30 @@
+@import "../../../assets/scss/_variables";
+
+.dateInput {
+  max-width: 70%;
+}
+.dateLabel {
+  margin-top: 6px;
+  margin-right: 12px;
+}
+.reminderCard {
+  width: 100% !important;
+}
+.deleteReminderBtn {
+  cursor: pointer;
+  padding: 5px;
+}
+.btnGroup {
+  width: 20px;
+}
+.btn {
+  border-radius: 0px !important;
+}
+.btnTab {
+  padding: 12px !important;
+}
+.dateCard {
+  padding: 10px !important;
+  background-color: $primary !important;
+  color: $white;
+}

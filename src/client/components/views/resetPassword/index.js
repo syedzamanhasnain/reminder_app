@@ -1,41 +1,51 @@
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { useDispatch, connect } from "react-redux";
-import { signInUser } from "./action";
-import { NavLink, withRouter, useHistory } from "react-router-dom";
+import { useHistory, NavLink, withRouter, useParams } from "react-router-dom";
+import { resetPassword, resetResetPassword } from "./action";
+
 import * as Yup from "yup";
 
 import "./style.scss";
 
-const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
+const ResetPassword = ({
+  isLoading,
+  isResetPasswordSuccess,
+  resetPasswordMsg,
+}) => {
   let history = useHistory();
   let dispatch = useDispatch();
+  let { resettoken } = useParams();
 
   useEffect(() => {
-    if (isSigninSuccess) {
-      setTimeout(function () {
-        history.push("/reminder");
-      }, 1000);
-    }
-  }, [isSigninSuccess]);
+    dispatch(resetResetPassword());
+    // console.log("signup");
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string().required("Required"),
+      password: Yup.string().required("Required").min(8, "Too Short!"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Required"),
     }),
+
     onSubmit: (values) => {
-      // console.log(values);
-      const signInData = {
+      const resetPasswordData = {
         email: values.email,
         password: values.password,
+        password_confirmation: values.password,
+        token: resettoken,
       };
-      // console.log(signInData);
-      dispatch(signInUser(signInData));
+      //alert(JSON.stringify(values, null, 2));
+      console.log(resetPasswordData);
+      dispatch(resetPassword(resetPasswordData));
     },
   });
   return (
@@ -52,9 +62,17 @@ const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
                   className="circle"
                 />
               </div>
-              <h3 className="text-center mb-4">Sign In</h3>
-              {!isLoading && signinMsg && (
-                <div className="alert alert-danger">{signinMsg}</div>
+              <h3 className="text-center mb-4">Reset Password</h3>
+              {!isLoading && resetPasswordMsg && (
+                <div
+                  className={
+                    isResetPasswordSuccess
+                      ? "alert alert-success"
+                      : "alert alert-danger"
+                  }
+                >
+                  {resetPasswordMsg}
+                </div>
               )}
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-3">
@@ -97,36 +115,44 @@ const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
                     <div className="text-danger">{formik.errors.password}</div>
                   ) : null}
                 </div>
-                <div className="d-flex justify-content-between">
-                  <div className="form-check mb-3">
-                    <input
-                      name="rememberMe"
-                      className="form-check-input mb-3 checkbox"
-                      type="checkbox"
-                      id="rememberMe"
-                    />
-                    <label className="form-check-label" htmlFor="rememberMe">
-                      Remember me
-                    </label>
-                  </div>
-                  <p className="  ">
-                    <NavLink exact className="ml-2" to="/forgotPassword">
-                      Forgot password?
-                    </NavLink>
-                  </p>
+                <div className="form-group mb-3">
+                  <label htmlFor="password">Confirm Password</label>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Enter confirm password"
+                    className={
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                        ? "form-control error"
+                        : "form-control"
+                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.confirmPassword}
+                  />
+                  {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword ? (
+                    <div className="text-danger">
+                      {formik.errors.confirmPassword}
+                    </div>
+                  ) : null}
                 </div>
 
                 <button
                   type="submit"
                   className="btn btn-primary btn-block mb-4"
+                  disabled={isLoading}
                 >
-                  Sign In
+                  Submit
                 </button>
               </form>
+
               <p className="text-center">
-                Don't have an account?
-                <NavLink exact className="ml-2" to="/signup">
-                  Sign Up
+                Already a member?
+                <NavLink exact className="ml-2" to="/signin">
+                  Sign In
                 </NavLink>
               </p>
             </div>
@@ -138,11 +164,14 @@ const SignIn = ({ isSigninSuccess, isLoading, signinMsg, jwtToken }) => {
 };
 
 const mapStateToProps = ({
-  signInReducer: { isSigninSuccess, isLoading, signinMsg, jwtToken } = {},
+  resetPasswordReducer: {
+    isLoading,
+    resetPasswordMsg,
+    isResetPasswordSuccess,
+  } = {},
 }) => ({
-  isSigninSuccess,
   isLoading,
-  signinMsg,
-  jwtToken,
+  isResetPasswordSuccess,
+  resetPasswordMsg,
 });
-export default withRouter(connect(mapStateToProps)(SignIn));
+export default withRouter(connect(mapStateToProps)(ResetPassword));
